@@ -1,1 +1,3 @@
-# moneyzera-api
+# moneyzera-doc
+
+![MoneyZera](./assets/git-banner.svg)
