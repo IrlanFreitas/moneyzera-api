@@ -1,14 +1,22 @@
 package com.otp.moneyzeraapi.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tipo_transacao")
-public class TipoTransacao {
+@Table(name = "categoria")
+@Data
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String descricao;
+
+    @Enumerated(EnumType.STRING)
+    private TipoCategoria tipo;
+
 }

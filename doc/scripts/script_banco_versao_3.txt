@@ -1,0 +1,39 @@
+CREATE TABLE `usuario` (
+  `id` int PRIMARY KEY,
+  `nome` varchar(255),
+  `email` varchar(255),
+  `senha` varchar(255),
+  `data` timestamp
+);
+
+CREATE TABLE `conta` (
+  `id` int PRIMARY KEY,
+  `nome` varchar(255),
+  `descricao` varchar(255),
+  `saldo` numeric(12,2),
+  `usuario_id` int
+);
+
+CREATE TABLE `transacao` (
+  `id` int PRIMARY KEY,
+  `conta_origem_id` int,
+  `conta_destino_id` int,
+  `status` ENUM ('PENDENTE', 'CANCELADO', 'EFETIVADO'),
+  `categoria_id` int,
+  `valor` numeric(12,2),
+  `data` timestamp
+);
+
+CREATE TABLE `categoria` (
+  `id` int PRIMARY KEY,
+  `descricao` varchar(255),
+  `tipo` ENUM ('DESPESA', 'RECEITA', 'TRANSFERENCIA')
+);
+
+ALTER TABLE `conta` ADD FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
+
+ALTER TABLE `transacao` ADD FOREIGN KEY (`conta_origem_id`) REFERENCES `conta` (`id`);
+
+ALTER TABLE `transacao` ADD FOREIGN KEY (`conta_destino_id`) REFERENCES `conta` (`id`);
+
+ALTER TABLE `transacao` ADD FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`);

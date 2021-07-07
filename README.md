@@ -5,6 +5,6 @@
 
 ### Modelagem
 
-![MoneyZera](./assets/Moneyzera.png)
+![MoneyZera](doc/modelagens/modelagem_versao_3.png)
 
 ### Swagger
