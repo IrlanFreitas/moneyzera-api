@@ -1,4 +1,4 @@
-package com.otp.moneyzeraapi.model;
+package com.otp.moneyzeraapi.enums;
 
 public enum StatusTransacao {
 

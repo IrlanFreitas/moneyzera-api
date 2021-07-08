@@ -1,7 +1,7 @@
 package com.otp.moneyzeraapi.model;
 
+import com.otp.moneyzeraapi.enums.TipoCategoria;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
