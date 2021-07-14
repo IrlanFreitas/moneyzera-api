@@ -3,6 +3,7 @@ package com.otp.moneyzeraapi.model;
 import com.otp.moneyzeraapi.enums.StatusTransacao;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -35,6 +36,6 @@ public class Transacao {
 
     private BigDecimal valor;
 
-//    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
+    @CreationTimestamp
     private LocalDate data;
 }
