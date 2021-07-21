@@ -4,21 +4,28 @@ import com.otp.moneyzeraapi.model.Usuario;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Optional;
 
-//@DataJpaTest - Poderia ser utilizado ?
+import static org.junit.jupiter.api.Assertions.*;
+
+//@SpringBootTest - Não precisa subir uma aplicação inteira para testar
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@DataJpaTest // Sempre faz rollback ao final das transações de cada teste
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Para não sobrescresver as configurações de banco em memória
 class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     public void deveVerificarAExistenciaDeUmEmail() {
@@ -26,11 +33,12 @@ class UsuarioRepositoryTest {
         //! Cenário -> Ação / Execução -> Verificação
 
         //* * Cenário
-        final Usuario teste = Usuario.builder().nome("teste").email("teste@email.com").build();
-        repository.save(teste);
+        final Usuario usuario = gerarUsuario();
+//        repository.save(teste);
+        entityManager.persist(usuario);
 
         //* * Ação / Execução
-        final Boolean isEmail = repository.existsByEmail("teste@email.com");
+        final Boolean isEmail = repository.existsByEmail("usuario@email.com");
 
         //* * Verificação
         assertTrue(isEmail);
@@ -41,7 +49,9 @@ class UsuarioRepositoryTest {
     public void deveRetornarFalsoQuandoNaoOuverUsuarioCadastradoComEmail() {
 
         //! Cenário
-        repository.deleteAll();
+        // Não precisa mais por conta da anotação @DataJpaTest que cria
+        // Uma transação por teste e faz rollback assim que termina
+//        repository.deleteAll();
 
         final Boolean existsByEmail = repository.existsByEmail("teste@email.com");
 
@@ -49,4 +59,44 @@ class UsuarioRepositoryTest {
 
     }
 
+    @Test
+    public void devePersistirUmUsuarioNaBaseDeDados() {
+        //Cenário
+        Usuario usuario = gerarUsuario();
+
+        //Execução
+        final Usuario usuarioSalvo = repository.save(usuario);
+
+        //Validação
+        assertNotNull(usuarioSalvo.getId());
+
+    }
+
+    @Test
+    public void deveBuscarUmUsuarioPorEmail() {
+        Usuario usuario = gerarUsuario();
+
+        entityManager.persist(usuario);
+
+        final Optional<Usuario> usuarioObtido = repository.findByEmail("usuario@email.com");
+
+        assertTrue(usuarioObtido.isPresent());
+    }
+
+    @Test
+    public void deveRetornarVazioAoBuscarUsuarioPorEmailQuandoNaoExisteNaBase() {
+
+        final Optional<Usuario> usuarioObtido = repository.findByEmail("usuario@email.com");
+
+        assertFalse(usuarioObtido.isPresent());
+    }
+
+    public static Usuario gerarUsuario() {
+        return Usuario
+                .builder()
+                .nome("usuario")
+                .email("usuario@email.com")
+                .senha("senha")
+                .build();
+    }
 }
