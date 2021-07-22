@@ -1,6 +1,7 @@
 package com.otp.moneyzeraapi.repository;
 
 import com.otp.moneyzeraapi.model.Usuario;
+import com.otp.moneyzeraapi.utils.UsuarioUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ class UsuarioRepositoryTest {
         //! Cenário -> Ação / Execução -> Verificação
 
         //* * Cenário
-        final Usuario usuario = gerarUsuario();
+        final Usuario usuario = UsuarioUtils.gerarUsuarioSemId();
 //        repository.save(teste);
         entityManager.persist(usuario);
 
@@ -62,7 +63,7 @@ class UsuarioRepositoryTest {
     @Test
     public void devePersistirUmUsuarioNaBaseDeDados() {
         //Cenário
-        Usuario usuario = gerarUsuario();
+        Usuario usuario = UsuarioUtils.gerarUsuarioSemId();
 
         //Execução
         final Usuario usuarioSalvo = repository.save(usuario);
@@ -74,7 +75,7 @@ class UsuarioRepositoryTest {
 
     @Test
     public void deveBuscarUmUsuarioPorEmail() {
-        Usuario usuario = gerarUsuario();
+        Usuario usuario = UsuarioUtils.gerarUsuarioSemId();
 
         entityManager.persist(usuario);
 
@@ -91,12 +92,4 @@ class UsuarioRepositoryTest {
         assertFalse(usuarioObtido.isPresent());
     }
 
-    public static Usuario gerarUsuario() {
-        return Usuario
-                .builder()
-                .nome("usuario")
-                .email("usuario@email.com")
-                .senha("senha")
-                .build();
-    }
 }
