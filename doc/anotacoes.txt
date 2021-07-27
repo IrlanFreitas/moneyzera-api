@@ -1,9 +1,17 @@
-Melhorias Parte 1
+Melhorias Parte 1:
 
-Banner personalizado
-Readme bem organizado
-Modelagem
+* Banner personalizado
+* Readme bem organizado
+* Modelagem
 
-Melhorias Parte 2
+Melhorias Parte 2:
 
 Remodelagem - Link para acesso: https://dbdiagram.io/d/60e4eb4b0b1d8a6d3969eb01
+
+Melhorias Parte 3:
+
+* Usar JWT para a autenticação
+* Saber se é necessário o UsuarioLoginForm
+* Fazer o CRUD de todos os models
+* Saber sobre padrões de service, as interfaces e os implementados e o por quê?
+* Melhor forma de gerenciar e padronizar os erros

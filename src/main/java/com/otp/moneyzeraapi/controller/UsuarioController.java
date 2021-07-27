@@ -1,6 +1,8 @@
 package com.otp.moneyzeraapi.controller;
 
+import com.otp.moneyzeraapi.exception.ErroAutenticacao;
 import com.otp.moneyzeraapi.form.UsuarioForm;
+import com.otp.moneyzeraapi.form.UsuarioLoginForm;
 import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
 import com.otp.moneyzeraapi.service.interfaces.UsuarioService;
@@ -38,5 +40,17 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
 
+    }
+
+    @RequestMapping(path = "/autenticar", method = RequestMethod.POST)
+    public ResponseEntity<?> autenticar(@Valid @RequestBody UsuarioLoginForm login) {
+
+        try {
+            final Usuario usuario = service.autenticar(login.getEmail(), login.getSenha());
+
+            return ResponseEntity.ok(usuario);
+        } catch (ErroAutenticacao error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
+        }
     }
 }
