@@ -19,6 +19,8 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String descricao;
+
     @ManyToOne
     @JoinColumn(name = "conta_origem_id")
     private Conta contaOrigem;

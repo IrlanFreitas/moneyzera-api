@@ -32,6 +32,8 @@ public class UsuarioController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioForm usuario) {
 
+//        assert usuario != null : "Usuário não pode ser nulo";
+
         try {
             final Usuario usuarioCadastrado = service.cadastrar(usuario.getUsuario());
 

@@ -1,17 +1,27 @@
-Melhorias Parte 1:
+Evoluções Parte 1:
 
-* Banner personalizado
-* Readme bem organizado
-* Modelagem
+    Melhorias:
+        * Banner personalizado
+        * Readme bem organizado
+        * Modelagem
 
-Melhorias Parte 2:
+Evoluções Parte 2:
 
-Remodelagem - Link para acesso: https://dbdiagram.io/d/60e4eb4b0b1d8a6d3969eb01
+    Remodelagem - Link para acesso: https://dbdiagram.io/d/60e4eb4b0b1d8a6d3969eb01
 
-Melhorias Parte 3:
+Evoluções Parte 3:
 
-* Usar JWT para a autenticação
-* Saber se é necessário o UsuarioLoginForm
-* Fazer o CRUD de todos os models
-* Saber sobre padrões de service, as interfaces e os implementados e o por quê?
-* Melhor forma de gerenciar e padronizar os erros
+    Tarefas:
+
+        * Usar JWT para a autenticação
+        * Saber se é necessário o UsuarioLoginForm
+        * Fazer o CRUD de todos os models
+        * Saber sobre padrões de service, as interfaces e os implementações e o por quê?
+        * Melhor forma de gerenciar e padronizar os erros
+        * Quando salvar ou atualizar o melhor é devolver o objeto com id (TransacaoService)
+        * Qual é a melhor forma de criar um objeto para filtragem, criar um form pra isso (TransaçãoService.buscar)
+        * Melhorar o padrão de validações de objetos de entrada dos controllers
+        * Como melhorar a validação feita no TransacaoServiceImpl
+        * Quando os Beans Validations não são tão bons assim ?
+        * é necessário um Form quando Entity é igual ?
+
