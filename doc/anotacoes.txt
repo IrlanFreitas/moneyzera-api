@@ -23,5 +23,9 @@ Evoluções Parte 3:
         * Melhorar o padrão de validações de objetos de entrada dos controllers
         * Como melhorar a validação feita no TransacaoServiceImpl
         * Quando os Beans Validations não são tão bons assim ?
-        * é necessário um Form quando Entity é igual ?
-
+        * É necessário um Form quando Entity é igual ?
+        * Para validações diferentes na mesma entity, quando o metodo salvar é uma validação e o editar outra
+        como fazer, um form pra cada ?
+        * Qual o papel da cada Bean no Spring, Controller, Service, Entity, Repository ?
+        * Quando uso no Controller um Service como o UsuarioService, como ele sabe que deve chamar o UsuarioServiceImpl ?
+        * Qual o padrão de resposta para cada metodo do http.

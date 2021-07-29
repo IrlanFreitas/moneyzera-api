@@ -6,7 +6,6 @@ import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
 import com.otp.moneyzeraapi.service.impl.UsuarioServiceImpl;
 import com.otp.moneyzeraapi.utils.UsuarioUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -96,7 +95,7 @@ class UsuarioServiceTest {
         final Usuario usuario = UsuarioUtils.gerarUsuarioSemId();
         Mockito.doThrow(RegraNegocioException.class).when(service).validarEmail("usuario@email.com");
 
-        assertThrows( RegraNegocioException.class, () -> service.cadastrar(usuario));
+        assertThrows( RegraNegocioException.class, () -> service.salvar(usuario));
 
 //        assertEquals("Já existe usuário cadastrado com esse email", regraNegocioException.getMessage());
         Mockito.verify(repository, Mockito.never()).save(usuario);
@@ -111,7 +110,7 @@ class UsuarioServiceTest {
 
         Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
 
-        final Usuario usuario = service.cadastrar(new Usuario());
+        final Usuario usuario = service.salvar(new Usuario());
 
         assertNotNull(usuario);
         assertEquals(1L, usuario.getId());

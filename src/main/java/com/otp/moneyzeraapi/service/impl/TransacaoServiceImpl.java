@@ -3,7 +3,6 @@ package com.otp.moneyzeraapi.service.impl;
 import com.otp.moneyzeraapi.enums.StatusTransacao;
 import com.otp.moneyzeraapi.enums.TipoCategoria;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
-import com.otp.moneyzeraapi.model.Categoria;
 import com.otp.moneyzeraapi.model.Transacao;
 import com.otp.moneyzeraapi.repository.TransacaoRepository;
 import com.otp.moneyzeraapi.service.interfaces.TransacaoService;
@@ -33,7 +32,7 @@ public class TransacaoServiceImpl implements TransacaoService {
 
     @Override
     @Transactional
-    public Transacao atualizar(Transacao transacao)  {
+    public Transacao atualizar(Transacao transacao) {
 
         if (transacao.getId() == null || transacao.getId() == 0)
             throw new IllegalArgumentException("Necessário id para atualizar a transação");

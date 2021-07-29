@@ -9,7 +9,7 @@ public interface TransacaoService {
 
     Transacao salvar(Transacao transacao);
 
-    Transacao atualizar(Transacao transacao) throws IllegalAccessException;
+    Transacao atualizar(Transacao transacao);
 
     void deletar(Long id);
 
@@ -17,5 +17,5 @@ public interface TransacaoService {
 
     void atualizarStatus(Transacao transacao, StatusTransacao status);
 
-    void validar( Transacao transacao);
+    void validar(Transacao transacao);
 }

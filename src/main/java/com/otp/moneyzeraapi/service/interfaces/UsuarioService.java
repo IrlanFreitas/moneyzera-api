@@ -6,8 +6,14 @@ public interface UsuarioService {
 
     Usuario autenticar(String email, String senha);
 
-    Usuario cadastrar(Usuario usuario);
+    Usuario salvar(Usuario usuario);
 
     void validarEmail(String email);
+
+    Usuario atualizar(Usuario usuario);
+
+    void deletar(Long id);
+
+    Usuario buscar(Long id);
 
 }

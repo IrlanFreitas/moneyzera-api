@@ -17,13 +17,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
-    public UsuarioServiceImpl() {
-    }
-
-    public UsuarioServiceImpl(UsuarioRepository repository) {
-        this.repository = repository;
-    }
-
     @Override
     public Usuario autenticar(String email, String senha) {
 
@@ -42,7 +35,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public Usuario cadastrar(Usuario usuario) {
+    public Usuario salvar(Usuario usuario) {
 
         validarEmail(usuario.getEmail());
 
@@ -55,5 +48,20 @@ public class UsuarioServiceImpl implements UsuarioService {
         final Boolean existsUserByEmail = repository.existsByEmail(email);
 
         if(existsUserByEmail) throw new RegraNegocioException("Já existe usuário cadastrado com esse email");
+    }
+
+    @Override
+    public Usuario atualizar(Usuario usuario) {
+        return null;
+    }
+
+    @Override
+    public void deletar(Long id) {
+
+    }
+
+    @Override
+    public Usuario buscar(Long id) {
+        return null;
     }
 }
