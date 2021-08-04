@@ -4,6 +4,7 @@ import com.otp.moneyzeraapi.enums.StatusTransacao;
 import com.otp.moneyzeraapi.model.Transacao;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TransacaoService {
 
@@ -18,4 +19,6 @@ public interface TransacaoService {
     void atualizarStatus(Transacao transacao, StatusTransacao status);
 
     void validar(Transacao transacao);
+
+    Optional<Transacao> buscarPorId(Long id);
 }

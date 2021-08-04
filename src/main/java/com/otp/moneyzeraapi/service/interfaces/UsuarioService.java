@@ -2,6 +2,8 @@ package com.otp.moneyzeraapi.service.interfaces;
 
 import com.otp.moneyzeraapi.model.Usuario;
 
+import java.util.Optional;
+
 public interface UsuarioService {
 
     Usuario autenticar(String email, String senha);
@@ -14,6 +16,6 @@ public interface UsuarioService {
 
     void deletar(Long id);
 
-    Usuario buscar(Long id);
+    Optional<Usuario> obterPorId(Long id);
 
 }

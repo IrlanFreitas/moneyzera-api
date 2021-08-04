@@ -52,7 +52,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario atualizar(Usuario usuario) {
-        return null;
+
+        if (usuario.getId() == null || usuario.getId() == 0)
+            throw new IllegalArgumentException("Necessário id para atualizar o usuário");
+
+        return repository.save(usuario);
     }
 
     @Override
@@ -61,7 +65,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario buscar(Long id) {
-        return null;
+    public Optional<Usuario> obterPorId(Long id) {
+
+        if (id == null || id == 0)
+            throw new RegraNegocioException("Necessário id para buscar usuario.");
+
+        return repository.findById(id);
     }
 }

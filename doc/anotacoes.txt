@@ -29,3 +29,5 @@ Evoluções Parte 3:
         * Qual o papel da cada Bean no Spring, Controller, Service, Entity, Repository ?
         * Quando uso no Controller um Service como o UsuarioService, como ele sabe que deve chamar o UsuarioServiceImpl ?
         * Qual o padrão de resposta para cada metodo do http.
+        * Como melhorar a qualidade das respostas dos controllers ? (ResponseEntity melhor trabalhado)
+        * Saber em que nível de maturidade essa api está.

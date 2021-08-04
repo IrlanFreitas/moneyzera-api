@@ -7,6 +7,7 @@ import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
 import com.otp.moneyzeraapi.service.interfaces.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class UsuarioController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioForm usuario) {
 
-    // assert usuario != null : "Usuário não pode ser nulo";
+        // assert usuario != null : "Usuário não pode ser nulo";
 
         try {
             final Usuario usuarioCadastrado = service.salvar(usuario.getUsuario());
@@ -56,5 +57,25 @@ public class UsuarioController {
         }
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> atualizar(@RequestParam("id") Long id, @RequestBody UsuarioForm usuarioForm) {
+        return service.obterPorId(id).map(usuarioEncontrado -> {
+            try {
+                usuarioForm.setId(id);
+                Usuario usuario = service.atualizar(usuarioForm.getUsuario());
+                usuario.setData(usuarioEncontrado.getData());
+                return ResponseEntity.ok(usuario);
+            } catch (Exception error) {
+                return ResponseEntity.badRequest().body(error.getMessage());
+            }
+        }).orElseGet(() -> new ResponseEntity("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
+    }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletar(@RequestParam("id") Long id) {
+        return service.obterPorId(id).map( usuario -> {
+            service.deletar(id);
+            return ResponseEntity.noContent().build();
+        }).orElseGet( () -> new ResponseEntity("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
+    }
 }

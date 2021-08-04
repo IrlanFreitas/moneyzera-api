@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContaServiceImpl implements ContaService {
@@ -37,8 +38,18 @@ public class ContaServiceImpl implements ContaService {
     @Override
     public List<Conta> buscarPorUsuarioId(Long id) {
 
-        if (id == null || id == 0) throw new RegraNegocioException("Necessário id para deletar a conta");
+        if (id == null || id == 0) throw new RegraNegocioException("Necessário id para obter usuario e as contas");
 
         return repository.findByUsuario_Id(id);
     }
+
+    @Override
+    public Optional<Conta> obterPorId(Long id) {
+
+        if (id == null || id == 0) throw new RegraNegocioException("Necessário id para obter a conta");
+
+        return repository.findById(id);
+    }
+
+
 }

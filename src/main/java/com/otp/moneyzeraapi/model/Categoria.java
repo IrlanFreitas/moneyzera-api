@@ -1,13 +1,19 @@
 package com.otp.moneyzeraapi.model;
 
 import com.otp.moneyzeraapi.enums.TipoCategoria;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "categoria")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Categoria {
 
     @Id

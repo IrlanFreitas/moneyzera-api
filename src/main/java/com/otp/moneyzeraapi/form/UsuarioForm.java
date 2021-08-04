@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UsuarioForm {
 
+    private Long id;
     @NotNull @NotEmpty
     private String nome;
     @NotNull @NotEmpty
@@ -23,6 +24,7 @@ public class UsuarioForm {
 
     public Usuario getUsuario() {
         return Usuario.builder()
+                .id(this.id)
                 .nome(this.nome)
                 .email(this.email)
                 .senha(this.senha)

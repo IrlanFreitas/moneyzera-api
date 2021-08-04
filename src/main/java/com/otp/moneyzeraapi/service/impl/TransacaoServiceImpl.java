@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class TransacaoServiceImpl implements TransacaoService {
@@ -115,5 +116,14 @@ public class TransacaoServiceImpl implements TransacaoService {
         if(transacao.getCategoria() == null && Objects.isNull(transacao.getCategoria().getTipo())) {
             throw new RegraNegocioException("Informe uma categoria.");
         }
+    }
+
+    @Override
+    public Optional<Transacao>  buscarPorId(Long id) {
+
+        if (id == null || id == 0)
+            throw new IllegalArgumentException("Necessário id para buscar a transação");
+
+        return repository.findById(id);
     }
 }

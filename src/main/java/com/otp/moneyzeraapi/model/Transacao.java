@@ -1,8 +1,10 @@
 package com.otp.moneyzeraapi.model;
 
 import com.otp.moneyzeraapi.enums.StatusTransacao;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.time.LocalDate;
 @Table(name = "transacao")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transacao {
 
     @Id

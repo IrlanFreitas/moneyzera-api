@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
@@ -38,6 +39,14 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public List<Categoria> listar() {
         return repository.findAll();
+    }
+
+    @Override
+    public Optional<Categoria> obterPorId(Long id) {
+
+        if (id == null || id == 0) throw new RegraNegocioException("Necessário id para buscar categoria");
+
+        return repository.findById(id);
     }
 
 //    @Override
