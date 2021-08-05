@@ -62,6 +62,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void deletar(Long id) {
 
+        if (id == null || id == 0)
+            throw new IllegalArgumentException("Necessário id para atualizar o usuário");
+
+        repository.deleteById(id);
     }
 
     @Override

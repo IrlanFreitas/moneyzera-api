@@ -68,7 +68,7 @@ public class UsuarioController {
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
-        }).orElseGet(() -> new ResponseEntity("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet(() -> new ResponseEntity<>("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -76,6 +76,7 @@ public class UsuarioController {
         return service.obterPorId(id).map( usuario -> {
             service.deletar(id);
             return ResponseEntity.noContent().build();
-        }).orElseGet( () -> new ResponseEntity("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet( () -> new ResponseEntity<>("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
     }
+
 }

@@ -28,6 +28,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     public Transacao salvar(Transacao transacao) {
 
         validar(transacao);
+        transacao.setId(null);
         return repository.save(transacao);
     }
 

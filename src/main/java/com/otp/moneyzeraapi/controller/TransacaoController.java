@@ -36,7 +36,7 @@ public class TransacaoController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> salvar(@RequestBody TransacaoForm transacaoForm) {
         try {
-
+            transacaoForm.setId(null);
             final Transacao transacao = service.salvar(transacaoForm.converter(contaService, categoriaService));
 
             return ResponseEntity.created(URI.create("/transacao/" + transacao.getId())).build();
@@ -57,7 +57,7 @@ public class TransacaoController {
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
-        }).orElseGet(() -> new ResponseEntity("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet(() -> new ResponseEntity<>("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -78,7 +78,7 @@ public class TransacaoController {
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
-        }).orElseGet(() -> new ResponseEntity("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet(() -> new ResponseEntity<>("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -99,8 +99,8 @@ public class TransacaoController {
 
             final Optional<Usuario> usuario = usuarioService.obterPorId(usuarioId);
 
-            if (!usuario.isPresent())
-                return ResponseEntity.badRequest().body("Usuário não encontrado para localizar suas transações.");
+            if (usuario.isEmpty())
+                return ResponseEntity.noContent().build();
 
             return ResponseEntity.ok(service.buscar(transacao));
 
@@ -112,7 +112,13 @@ public class TransacaoController {
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id) {
         try {
-            return ResponseEntity.ok(service.buscarPorId(id).get());
+            final Optional<Transacao> transacao = service.buscarPorId(id);
+
+            if (transacao.isPresent())
+                return ResponseEntity.ok(transacao.get());
+
+            return ResponseEntity.noContent().build();
+
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }

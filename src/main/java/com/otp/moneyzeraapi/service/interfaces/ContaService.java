@@ -16,4 +16,6 @@ public interface ContaService {
     List<Conta> buscarPorUsuarioId(Long id);
 
     Optional<Conta> obterPorId(Long id);
+
+    List<Conta> obter();
 }

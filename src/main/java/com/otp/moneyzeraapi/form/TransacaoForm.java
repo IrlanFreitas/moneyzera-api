@@ -44,7 +44,6 @@ public class TransacaoForm {
     }
 
     private Conta obterConta(ContaService contaService, Long id) {
-
         return contaService.obterPorId(id)
                 .orElseThrow(
                         () -> new RegraNegocioException("Conta não encontrada para o id informado."));

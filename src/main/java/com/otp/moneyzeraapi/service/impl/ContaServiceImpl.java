@@ -7,6 +7,7 @@ import com.otp.moneyzeraapi.service.interfaces.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class ContaServiceImpl implements ContaService {
 
     @Override
     public Conta salvar(Conta conta) {
+        conta.setSaldo(new BigDecimal(0));
         return repository.save(conta);
     }
 
@@ -51,5 +53,9 @@ public class ContaServiceImpl implements ContaService {
         return repository.findById(id);
     }
 
+    @Override
+    public List<Conta> obter() {
+        return repository.findAll();
+    }
 
 }
