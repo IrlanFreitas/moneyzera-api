@@ -20,9 +20,15 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nome;
+
     private String descricao;
 
     @Enumerated(EnumType.STRING)
     private TipoCategoria tipo;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
 }

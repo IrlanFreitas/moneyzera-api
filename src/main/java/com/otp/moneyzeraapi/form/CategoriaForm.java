@@ -1,0 +1,30 @@
+package com.otp.moneyzeraapi.form;
+
+import com.otp.moneyzeraapi.enums.TipoCategoria;
+import com.otp.moneyzeraapi.model.Categoria;
+import lombok.Builder;
+import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+@Data
+@Builder
+public class CategoriaForm {
+
+    private Long id;
+    @NotNull @NotEmpty
+    private String nome;
+    private String descricao;
+    private String tipo;
+    private Long usuarioId;
+
+    public Categoria converter() {
+        return Categoria.builder()
+                .id(id)
+                .nome(nome)
+                .descricao(descricao)
+                .tipo(TipoCategoria.valueOf(tipo))
+                .build();
+    }
+}

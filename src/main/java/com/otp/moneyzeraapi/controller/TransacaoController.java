@@ -74,7 +74,7 @@ public class TransacaoController {
         return service.buscarPorId(id).map(transacaoEncontrada -> {
             try {
                 service.deletar(transacaoEncontrada.getId());
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok().build();
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
@@ -86,7 +86,7 @@ public class TransacaoController {
 //    public ResponseEntity<?> buscar(@RequestParam TransacaoForm transacaoForm) {
     public ResponseEntity<?> buscar(@RequestParam(value = "descricao", required = false) String descricao,
                                     @RequestParam(value = "data", required = false) LocalDate data,
-                                    @RequestParam("usuario") Long usuarioId) {
+                                    @RequestParam(value = "usuario", required = false) Long usuarioId) {
         try {
 
             final Transacao transacao = Transacao.builder().descricao(descricao).data(data).contaOrigem(

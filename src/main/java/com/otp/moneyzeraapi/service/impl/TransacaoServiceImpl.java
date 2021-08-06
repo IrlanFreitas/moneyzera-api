@@ -5,6 +5,7 @@ import com.otp.moneyzeraapi.enums.TipoCategoria;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
 import com.otp.moneyzeraapi.model.Transacao;
 import com.otp.moneyzeraapi.repository.TransacaoRepository;
+import com.otp.moneyzeraapi.service.interfaces.ContaService;
 import com.otp.moneyzeraapi.service.interfaces.TransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -23,12 +24,28 @@ public class TransacaoServiceImpl implements TransacaoService {
     @Autowired
     private TransacaoRepository repository;
 
+    @Autowired
+    private ContaService contaService;
+
     @Override
     @Transactional
     public Transacao salvar(Transacao transacao) {
 
         validar(transacao);
         transacao.setId(null);
+
+        switch (transacao.getCategoria().getTipo()) {
+            case RECEITA:
+                contaService.depositar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case DESPESA:
+                contaService.retirar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case TRANSFERENCIA:
+                contaService.transferir(transacao.getContaOrigem(), transacao.getContaDestino(), transacao.getValor());
+                break;
+        }
+
         return repository.save(transacao);
     }
 
@@ -69,6 +86,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Transactional
     public void atualizarStatus(Transacao transacao, StatusTransacao status) {
         transacao.setStatus(status);
         atualizar(transacao);

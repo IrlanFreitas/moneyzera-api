@@ -1,6 +1,7 @@
 package com.otp.moneyzeraapi.form;
 
 import com.otp.moneyzeraapi.enums.StatusTransacao;
+import com.otp.moneyzeraapi.enums.TipoCategoria;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
 import com.otp.moneyzeraapi.model.Categoria;
 import com.otp.moneyzeraapi.model.Conta;
@@ -26,21 +27,26 @@ public class TransacaoForm {
     private BigDecimal valor;
     private String status;
 
+    //TODO Regra lógica de conversão, podem ficar aqui ?
     public Transacao converter(ContaService contaService,
                                CategoriaService categoriaService) {
 
-        return Transacao.builder()
+        final Transacao.TransacaoBuilder builder = Transacao.builder()
                 .id(id)
                 .descricao(descricao)
                 .data(data)
                 .contaOrigem(obterConta(contaService, contaOrigemId))
-                .contaDestino(obterConta(contaService, contaDestinoId))
-                .categoria(obterCategoria(categoriaService, categoriaId))
                 .status(StatusTransacao.valueOf(status))
-                .valor(valor)
-                .build();
+                .valor(valor);
 
+        final Categoria categoria = obterCategoria(categoriaService, categoriaId);
+        builder.categoria(categoria);
 
+        if(categoria.getTipo().equals(TipoCategoria.TRANSFERENCIA)) {
+            builder.contaDestino(obterConta(contaService, contaDestinoId));
+        }
+
+        return builder.build();
     }
 
     private Conta obterConta(ContaService contaService, Long id) {
