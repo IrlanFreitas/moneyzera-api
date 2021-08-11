@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class CategoriaForm {
 
-    private Long id;
     @NotNull @NotEmpty
     private String nome;
     private String descricao;
@@ -21,7 +20,6 @@ public class CategoriaForm {
 
     public Categoria converter() {
         return Categoria.builder()
-                .id(id)
                 .nome(nome)
                 .descricao(descricao)
                 .tipo(TipoCategoria.valueOf(tipo))

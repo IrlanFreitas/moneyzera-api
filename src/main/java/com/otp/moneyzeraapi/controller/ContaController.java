@@ -28,7 +28,6 @@ public class ContaController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> salvar(@Valid @RequestBody ContaForm contaForm) {
         try {
-            contaForm.setId(null);
             final Conta conta = service.salvar(contaForm.converter(usuarioService));
 
             return ResponseEntity.created(URI.create("/conta/"+conta.getId())).build();
@@ -65,8 +64,10 @@ public class ContaController {
     public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @Valid @RequestBody ContaForm contaForm ) {
         return service.obterPorId(id).map( contaEncontrada -> {
             try {
-                contaForm.setId(id);
-                final Conta conta = service.atualizar(contaForm.converter(usuarioService));
+
+                Conta conta = service.atualizar(contaForm.converter(usuarioService));
+                conta.setId(id);
+
                 return ResponseEntity.ok(conta);
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());

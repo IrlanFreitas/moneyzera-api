@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,5 +76,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RegraNegocioException("Necessário id para buscar usuario.");
 
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Usuario> obterTodos() {
+        return repository.findAll();
     }
 }

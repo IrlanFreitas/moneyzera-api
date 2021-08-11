@@ -1,5 +1,6 @@
 package com.otp.moneyzeraapi.controller;
 
+import com.otp.moneyzeraapi.enums.StatusTransacao;
 import com.otp.moneyzeraapi.form.TransacaoForm;
 import com.otp.moneyzeraapi.model.Conta;
 import com.otp.moneyzeraapi.model.Transacao;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class TransacaoController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> salvar(@RequestBody TransacaoForm transacaoForm) {
         try {
-            transacaoForm.setId(null);
+
             final Transacao transacao = service.salvar(transacaoForm.converter(contaService, categoriaService));
 
             return ResponseEntity.created(URI.create("/transacao/" + transacao.getId())).build();
@@ -46,7 +48,7 @@ public class TransacaoController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody TransacaoForm transacaoForm) {
+    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody TransacaoForm transacaoForm) {
 
         return service.buscarPorId(id).map(transacaoEncontrada -> {
             try {
@@ -57,7 +59,25 @@ public class TransacaoController {
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
-        }).orElseGet(() -> new ResponseEntity<>("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet(() -> new ResponseEntity<>("Transação não encontrada.", HttpStatus.BAD_REQUEST));
+    }
+
+    @RequestMapping(path = "/{id}/atualiza-status", method = RequestMethod.PUT)
+    public ResponseEntity<?> atualizarStatus(@PathVariable("id") @NotNull Long id, @RequestBody String status) {
+        return service.buscarPorId(id).map( transacaoEncontrada -> {
+            final StatusTransacao statusTransacao = StatusTransacao.valueOf(status);
+
+            if (statusTransacao == null) return ResponseEntity.badRequest().body("Status inválido");
+
+            try {
+                transacaoEncontrada.setStatus(statusTransacao);
+                service.atualizar(transacaoEncontrada);
+                return ResponseEntity.ok().build();
+            } catch (Exception error) {
+                return ResponseEntity.badRequest().body(error.getMessage());
+            }
+
+        }).orElseGet( () ->  new ResponseEntity<>("Transação não encontrada", HttpStatus.NO_CONTENT));
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -78,7 +98,7 @@ public class TransacaoController {
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
-        }).orElseGet(() -> new ResponseEntity<>("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
+        }).orElseGet(() -> new ResponseEntity<>("Transação não encontrado.", HttpStatus.BAD_REQUEST));
     }
 
     @RequestMapping(method = RequestMethod.GET)

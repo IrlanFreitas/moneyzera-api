@@ -16,8 +16,8 @@ Evoluções Parte 3:
         * Usar JWT para a autenticação
         * Saber se é necessário o UsuarioLoginForm
         * Fazer o CRUD de todos os models
-        * Saber sobre padrões de service, as interfaces e os implementações e o por que?
-        * Melhor forma de gerenciar e padronizar os erros
+        * Saber sobre padrões de service, as interfaces e os implementações e o por quê?
+        * Melhor forma de gerenciar e padronizar os erros?
         * Quando salvar ou atualizar o melhor é devolver o objeto com id (TransacaoService)
         * Qual é a melhor forma de criar um objeto para filtragem, criar um form pra isso (TransaçãoService.buscar)
         * Melhorar o padrão de validações de objetos de entrada dos controllers
@@ -35,3 +35,4 @@ Evoluções Parte 3:
         * É uma boa consultar antes de deletar/atualizar?
         * Se eu for delatar um item, e não encontrar, retornar noContent ou badRequest?
         * Ler sobre @ApiResponses https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
+        * O que fazer quando não deseja que um campo seja atualizado, ele não está no form, mas é o risco de ficar null ?

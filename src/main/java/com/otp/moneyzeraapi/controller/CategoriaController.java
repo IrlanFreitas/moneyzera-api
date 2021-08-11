@@ -31,7 +31,6 @@ public class CategoriaController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> salvar(@RequestBody CategoriaForm categoriaForm) {
         try {
-            categoriaForm.setId(null);
             final Categoria categoriaSalva = service.salvar(categoriaForm.converter());
 
             return ResponseEntity.created(URI.create("/categoria/" + categoriaSalva.getId())).build();
@@ -42,14 +41,16 @@ public class CategoriaController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody Categoria categoriaForm) {
+    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody CategoriaForm categoriaForm) {
 
         try {
-            final Optional<Categoria> categoria = service.obterPorId(id);
+            final Optional<Categoria> categoriaEncontrada = service.obterPorId(id);
 
-            if (categoria.isPresent()) {
-                categoriaForm.setId(id);
-                final Categoria categoriaAtualizada = service.atualizar(categoriaForm);
+            if (categoriaEncontrada.isPresent()) {
+                final Categoria categoria = categoriaForm.converter();
+                categoria.setId(categoriaEncontrada.get().getId());
+
+                final Categoria categoriaAtualizada = service.atualizar(categoria);
                 return ResponseEntity.ok(categoriaAtualizada);
             }
 

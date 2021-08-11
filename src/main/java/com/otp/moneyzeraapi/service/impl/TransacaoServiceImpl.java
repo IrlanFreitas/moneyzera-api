@@ -34,20 +34,11 @@ public class TransacaoServiceImpl implements TransacaoService {
         validar(transacao);
         transacao.setId(null);
 
-        switch (transacao.getCategoria().getTipo()) {
-            case RECEITA:
-                contaService.depositar(transacao.getContaOrigem(), transacao.getValor());
-                break;
-            case DESPESA:
-                contaService.retirar(transacao.getContaOrigem(), transacao.getValor());
-                break;
-            case TRANSFERENCIA:
-                contaService.transferir(transacao.getContaOrigem(), transacao.getContaDestino(), transacao.getValor());
-                break;
-        }
+        movimentar(transacao);
 
         return repository.save(transacao);
     }
+
 
     @Override
     @Transactional
@@ -57,6 +48,15 @@ public class TransacaoServiceImpl implements TransacaoService {
             throw new IllegalArgumentException("Necessário id para atualizar a transação");
 
         validar(transacao);
+
+        final Optional<Transacao> transacaoEncontrada = buscarPorId(transacao.getId());
+
+        if (transacaoEncontrada.isEmpty()) throw new RegraNegocioException("Transação não encontrada.");
+
+        reverterMovimentacao(transacaoEncontrada.get());
+
+        movimentar(transacao);
+
         return repository.save(transacao);
     }
 
@@ -66,6 +66,10 @@ public class TransacaoServiceImpl implements TransacaoService {
 
         if (id == null || id == 0)
             throw new IllegalArgumentException("Necessário id para atualizar a transação");
+
+        final Optional<Transacao> transacao = buscarPorId(id);
+
+        transacao.ifPresent(this::reverterMovimentacao);
 
         repository.deleteById(id);
     }
@@ -88,6 +92,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     @Override
     @Transactional
     public void atualizarStatus(Transacao transacao, StatusTransacao status) {
+        //TODO Os status devem alterar o total da conta
         transacao.setStatus(status);
         atualizar(transacao);
     }
@@ -100,49 +105,79 @@ public class TransacaoServiceImpl implements TransacaoService {
             throw new RegraNegocioException("Informe uma descrição válida.");
         }
 
-        if(transacao.getData() == null) {
+        if (transacao.getData() == null) {
             throw new RegraNegocioException("Informe uma data válida.");
         }
 
-        if(transacao.getCategoria().getTipo().equals(TipoCategoria.DESPESA) ||
+        if (transacao.getCategoria().getTipo().equals(TipoCategoria.DESPESA) ||
                 transacao.getCategoria().getTipo().equals(TipoCategoria.RECEITA)) {
 
-            if(transacao.getContaOrigem().getId() == null) {
+            if (transacao.getContaOrigem().getId() == null) {
                 throw new RegraNegocioException("Informe uma conta já cadastrada.");
             }
 
-            if(transacao.getContaOrigem().getUsuario().getId() == null) {
+            if (transacao.getContaOrigem().getUsuario().getId() == null) {
                 throw new RegraNegocioException("Informe um usuário já cadastrado.");
             }
         }
 
-        if(transacao.getCategoria().getTipo().equals(TipoCategoria.TRANSFERENCIA)) {
+        if (transacao.getCategoria().getTipo().equals(TipoCategoria.TRANSFERENCIA)) {
 
-            if(transacao.getContaOrigem().getId() == null && transacao.getContaDestino().getId() == null) {
+            if (transacao.getContaOrigem().getId() == null && transacao.getContaDestino().getId() == null) {
                 throw new RegraNegocioException("Informe uma conta já cadastrada.");
             }
 
-            if(transacao.getContaOrigem().getUsuario().getId() == null
-                && transacao.getContaDestino().getUsuario().getId() == null) {
+            if (transacao.getContaOrigem().getUsuario().getId() == null
+                    && transacao.getContaDestino().getUsuario().getId() == null) {
                 throw new RegraNegocioException("Informe um usuário já cadastrado.");
             }
         }
 
-        if(transacao.getValor() == null || transacao.getValor().compareTo(BigDecimal.ZERO) < 1) {
+        if (transacao.getValor() == null || transacao.getValor().compareTo(BigDecimal.ZERO) < 1) {
             throw new RegraNegocioException("Informe um valor válido.");
         }
 
-        if(transacao.getCategoria() == null && Objects.isNull(transacao.getCategoria().getTipo())) {
+        if (transacao.getCategoria() == null) {
             throw new RegraNegocioException("Informe uma categoria.");
         }
     }
 
     @Override
-    public Optional<Transacao>  buscarPorId(Long id) {
+    public Optional<Transacao> buscarPorId(Long id) {
 
         if (id == null || id == 0)
             throw new IllegalArgumentException("Necessário id para buscar a transação");
 
         return repository.findById(id);
+    }
+
+    @Transactional
+    private void movimentar(Transacao transacao) {
+        switch (transacao.getCategoria().getTipo()) {
+            case RECEITA:
+                contaService.depositar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case DESPESA:
+                contaService.retirar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case TRANSFERENCIA:
+                contaService.transferir(transacao.getContaOrigem(), transacao.getContaDestino(), transacao.getValor());
+                break;
+        }
+    }
+
+    @Transactional
+    private void reverterMovimentacao(Transacao transacao) {
+        switch (transacao.getCategoria().getTipo()) {
+            case RECEITA:
+                contaService.retirar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case DESPESA:
+                contaService.depositar(transacao.getContaOrigem(), transacao.getValor());
+                break;
+            case TRANSFERENCIA:
+                contaService.transferir(transacao.getContaDestino(), transacao.getContaOrigem(), transacao.getValor());
+                break;
+        }
     }
 }

@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Builder
 public class TransacaoForm {
 
-    private Long id;
+    private String nome;
     private String descricao;
     private LocalDate data;
     private Long contaOrigemId;
@@ -32,7 +32,7 @@ public class TransacaoForm {
                                CategoriaService categoriaService) {
 
         final Transacao.TransacaoBuilder builder = Transacao.builder()
-                .id(id)
+                .nome(nome)
                 .descricao(descricao)
                 .data(data)
                 .contaOrigem(obterConta(contaService, contaOrigemId))

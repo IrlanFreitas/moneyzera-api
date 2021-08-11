@@ -20,23 +20,18 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository repository;
-
-    @Autowired
     private UsuarioService service;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Usuario>> obter() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok( service.obterTodos() );
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioForm usuario) {
-
-        // assert usuario != null : "Usuário não pode ser nulo";
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioForm usuarioForm) {
 
         try {
-            final Usuario usuarioCadastrado = service.salvar(usuario.getUsuario());
+            final Usuario usuarioCadastrado = service.salvar(usuarioForm.getUsuario());
 
             return ResponseEntity.created(URI.create("/usuario/" + usuarioCadastrado.getId())).build();
         } catch (Exception error) {
@@ -61,10 +56,14 @@ public class UsuarioController {
     public ResponseEntity<?> atualizar(@RequestParam("id") Long id, @RequestBody UsuarioForm usuarioForm) {
         return service.obterPorId(id).map(usuarioEncontrado -> {
             try {
-                usuarioForm.setId(id);
-                Usuario usuario = service.atualizar(usuarioForm.getUsuario());
+
+                Usuario usuario =  usuarioForm.getUsuario();
+                //TODO - Arrumar um jeito disso não atualizar pra null
                 usuario.setData(usuarioEncontrado.getData());
-                return ResponseEntity.ok(usuario);
+
+                Usuario usuarioAtualizado = service.atualizar(usuario);
+
+                return ResponseEntity.ok(usuarioAtualizado);
             } catch (Exception error) {
                 return ResponseEntity.badRequest().body(error.getMessage());
             }
@@ -75,7 +74,7 @@ public class UsuarioController {
     public ResponseEntity<?> deletar(@RequestParam("id") Long id) {
         return service.obterPorId(id).map( usuario -> {
             service.deletar(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }).orElseGet( () -> new ResponseEntity<>("Usuário não encontrado.", HttpStatus.BAD_REQUEST));
     }
 

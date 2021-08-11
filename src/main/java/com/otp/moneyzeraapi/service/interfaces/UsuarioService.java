@@ -2,6 +2,7 @@ package com.otp.moneyzeraapi.service.interfaces;
 
 import com.otp.moneyzeraapi.model.Usuario;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioService {
@@ -17,5 +18,7 @@ public interface UsuarioService {
     void deletar(Long id);
 
     Optional<Usuario> obterPorId(Long id);
+
+    List<Usuario> obterTodos();
 
 }

@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class ContaForm {
 
-    private Long id;
     private String nome;
     private String descricao;
     @NotNull
@@ -22,7 +21,6 @@ public class ContaForm {
 
     public Conta converter(UsuarioService usuarioService) {
         return Conta.builder()
-                .id(id)
                 .nome(nome)
                 .descricao(descricao)
                 .usuario(obterUsuario(usuarioService))
