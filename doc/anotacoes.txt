@@ -33,6 +33,8 @@ Evoluções Parte 3:
         * Saber em que nível de maturidade essa api está.
         * Como personalizar os erros de ValidationBeans?
         * É uma boa consultar antes de deletar/atualizar?
-        * Se eu for delatar um item, e não encontrar, retornar noContent ou badRequest?
+        * Se eu for delatar um item, e não encontrar, retornar noContent, notFount ou badRequest?
         * Ler sobre @ApiResponses https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
         * O que fazer quando não deseja que um campo seja atualizado, ele não está no form, mas é o risco de ficar null ?
+        * Não consegui criar um utils que seja injetável para Spring, classe TransacaoUtils, por quê ?
+        * Muitos problemas com testes na camada de serviço pro conta da dependências, TransacaoServiceImplTest.

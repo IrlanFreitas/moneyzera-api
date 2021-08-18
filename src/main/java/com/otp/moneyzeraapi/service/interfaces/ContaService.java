@@ -25,4 +25,7 @@ public interface ContaService {
     List<Conta> obter();
 
     void transferir(Conta contaOrigem, Conta contaDestino, BigDecimal valor);
+
+    BigDecimal obterSaldoUsuario(Long usuarioId);
+
 }

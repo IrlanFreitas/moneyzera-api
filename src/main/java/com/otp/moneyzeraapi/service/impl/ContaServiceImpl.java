@@ -65,6 +65,14 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
+    public BigDecimal obterSaldoUsuario(Long usuarioId) {
+
+        if (usuarioId == null || usuarioId == 0) throw new RegraNegocioException("Necessário id para obter saldo das contas do usuário");
+
+        return repository.obterSaldoUsuario(usuarioId);
+    }
+
+    @Override
     @Transactional
     public void deletar(Long id) {
         if (id == null || id == 0) throw new RegraNegocioException("Necessário id para deletar a conta");

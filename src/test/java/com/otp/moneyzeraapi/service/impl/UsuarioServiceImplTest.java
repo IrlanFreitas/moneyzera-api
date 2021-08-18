@@ -1,4 +1,4 @@
-package com.otp.moneyzeraapi.service.interfaces;
+package com.otp.moneyzeraapi.service.impl;
 
 import com.otp.moneyzeraapi.exception.ErroAutenticacao;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-class UsuarioServiceTest {
+class UsuarioServiceImplTest {
 
     @SpyBean
     UsuarioServiceImpl service;

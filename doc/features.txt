@@ -1,0 +1,35 @@
+Usuário:
+
+Conta:
+
+Transações (Devem ter um efeito na conta que foi associada):
+
+    Observações:
+        * O status deve interferir no resultado do saldo da conta
+
+    salvar (Aqui vou colocar efetuar ou criar, algo mais semântico)
+
+    atualizar (Obter a transação anterior, e mudar o efeito na conta também e não perder a data)
+        ficar atento para não perder a data de cadastro
+        e o valor deve ser atualizado na conta
+
+    deletar
+        valor deve ser atualizado na conta
+
+    filtrar
+        melhorar o transaçãoFiltroForm
+        pegar o usuário pelo token
+        todos do mesmo mês
+        pegar os filtros mais simples do mobills
+        não há necessidade de consultar o saldo já que é conta é reflexo disso
+
+    obterSaldoDasTransaçõesPorTipoDaCategoriaEntreAsDatas
+        obter todas as trasações em um data especifica, no geral do começo até o final do mês
+        sendo que eles tem que ser, DESPESA, RECEITA, TRANSFERENCIA(Não é tão usado assim)
+
+        algo parecido feito no curso:
+
+        "select sum(l.valor) from lancamento l join l.usuario u
+        where u.id = :idUsuario and l.tipo group by u "
+
+Categorias:
