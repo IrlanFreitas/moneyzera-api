@@ -4,7 +4,6 @@ import com.otp.moneyzeraapi.exception.ErroAutenticacao;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
 import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
-import com.otp.moneyzeraapi.service.impl.UsuarioServiceImpl;
 import com.otp.moneyzeraapi.utils.UsuarioUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

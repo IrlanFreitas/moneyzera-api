@@ -20,11 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,8 +40,8 @@ class TransacaoServiceImplTest {
     // ! É da classe que estamos testando pois é necessário
     // ! que chame os métodos reais
     @SpyBean
+//    @Autowired
     private TransacaoServiceImpl service;
-
 
     // ! Todas as chamadas são mocadas (simuladas)
     @MockBean
@@ -115,6 +119,91 @@ class TransacaoServiceImplTest {
         // * Execução e Verificação
         assertThrows(IllegalArgumentException.class, () -> service.atualizar(transacaoSalva));
         Mockito.verify(repository, Mockito.never()).save(transacaoSalva);
+    }
+
+    @Test
+    public void deveDeletarUmaTransacao() {
+        // * Cenário
+        Transacao transacao = criarTransacao();
+        transacao.setId(1L);
+
+        // * Execução
+        service.deletar(1L);
+
+        // * Verificação
+        Mockito.verify(repository).deleteById(1L);
+    }
+
+    @Test
+    public void deveLancarErroAoTentarDeletarUmaTransacaoQueAindaNaoFoiSalva() {
+        // * Cenário
+        Transacao transacao = criarTransacao();
+
+        // * Execução
+        assertThrows(IllegalArgumentException.class, () -> service.deletar(1L));
+
+        // * Verificação
+        Mockito.verify(repository, Mockito.never()).deleteById(1L);
+    }
+
+    @Test
+    public void deveFiltrarTransacoes() {
+        Transacao transacao = criarTransacao();
+        transacao.setId(1L);
+
+        List<Transacao> transacoes = Arrays.asList(transacao);
+        Mockito.when(repository.findAll(Mockito.any(Example.class)) ).thenReturn(transacoes);
+
+        List<Transacao> resultado = service.buscar(transacao);
+
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+
+    }
+
+    @Test
+    public void deveObterUmaTransacaoPorId() {
+        Transacao transacao = criarTransacao();
+        transacao.setId(1L);
+
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(transacao));
+
+        final Optional<Transacao> resultado = service.buscarPorId(1L);
+
+        assertTrue(resultado.isPresent());
+    }
+
+    @Test
+    public void deveRetornarVazioQuandoTransacaoNaoExiste() {
+
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        final Optional<Transacao> resultado = service.buscarPorId(1L);
+
+        assertFalse(resultado.isPresent());
+    }
+
+    @Test
+    public void deveLancarErrorAoValidar() {
+        Transacao transacao = Transacao.builder().build();
+
+        final RegraNegocioException exception = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+
+        assertEquals("Informe uma descrição válida.", exception.getMessage());
+    }
+
+    @Test
+    public void deveAtualizarStatus() {
+        Transacao transacao = criarTransacao();
+        transacao.setId(1L);
+        transacao.setStatus(StatusTransacao.EFETIVADO);
+
+        Mockito.doNothing().when(service).atualizar(transacao);
+
+        service.atualizarStatus(transacao, StatusTransacao.PENDENTE);
+
+        assertEquals(transacao.getStatus().name(), StatusTransacao.PENDENTE.name());
+        Mockito.verify(service).atualizar(transacao);
     }
 
     private Transacao criarTransacao() {
