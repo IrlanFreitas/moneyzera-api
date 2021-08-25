@@ -107,27 +107,22 @@ public class TransacaoServiceImpl implements TransacaoService {
             throw new RegraNegocioException("Informe uma data válida.");
         }
 
-        if (transacao.getCategoria().getTipo().equals(TipoCategoria.DESPESA) ||
-                transacao.getCategoria().getTipo().equals(TipoCategoria.RECEITA)) {
+        if (transacao.getContaOrigem().getId() == null) {
+            throw new RegraNegocioException("Informe uma conta já cadastrada.");
+        }
 
-            if (transacao.getContaOrigem().getId() == null) {
-                throw new RegraNegocioException("Informe uma conta já cadastrada.");
-            }
-
-            if (transacao.getContaOrigem().getUsuario().getId() == null) {
-                throw new RegraNegocioException("Informe um usuário já cadastrado.");
-            }
+        if (transacao.getContaOrigem().getUsuario().getId() == null) {
+            throw new RegraNegocioException("Informe um usuário já cadastrado.");
         }
 
         if (transacao.getCategoria().getTipo().equals(TipoCategoria.TRANSFERENCIA)) {
 
-            if (transacao.getContaOrigem().getId() == null && transacao.getContaDestino().getId() == null) {
-                throw new RegraNegocioException("Informe uma conta já cadastrada.");
+            if ( transacao.getContaDestino().getId() == null) {
+                throw new RegraNegocioException("Informe uma conta destino já cadastrada.");
             }
 
-            if (transacao.getContaOrigem().getUsuario().getId() == null
-                    && transacao.getContaDestino().getUsuario().getId() == null) {
-                throw new RegraNegocioException("Informe um usuário já cadastrado.");
+            if (transacao.getContaDestino().getUsuario().getId() == null) {
+                throw new RegraNegocioException("Informe um usuário na conta destino já cadastrado.");
             }
         }
 

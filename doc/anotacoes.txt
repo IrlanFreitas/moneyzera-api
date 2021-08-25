@@ -16,25 +16,30 @@ Evoluções Parte 3:
         * Usar JWT para a autenticação
         * Saber se é necessário o UsuarioLoginForm
         * Fazer o CRUD de todos os models
-        * Saber sobre padrões de service, as interfaces e os implementações e o por quê?
+        * Ler sobre @ApiResponses https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
+
+    Dúvidas:
+
+        * Saber em que nível de maturidade essa api está.
+        * Qual o papel da cada Bean no Spring, Controller, Service, Entity, Repository?
         * Melhor forma de gerenciar e padronizar os erros?
+        * Saber sobre padrões de service, as interfaces e os implementações e o por quê?
         * Quando salvar ou atualizar o melhor é devolver o objeto com id (TransacaoService)
         * Qual é a melhor forma de criar um objeto para filtragem, criar um form pra isso (TransaçãoService.buscar)
-        * Melhorar o padrão de validações de objetos de entrada dos controllers
-        * Como melhorar a validação feita no TransacaoServiceImpl
         * Quando os Beans Validations não são tão bons assim?
-        * É necessário um Form quando Entity é igual?
+        * Como personalizar os erros de ValidationBeans?
+        * É necessário um Form quando Entity é igual? (Acho que já entendi isso por conta do campo id)
+        * É uma boa consultar antes de deletar/atualizar?
+        * mvn test não funcionando.
+        * Se eu for delatar um item, e não encontrar, retornar noContent, notFount ou badRequest?
+        * Teria como o readme do projeto ter a porcentagem de cobertura de código testado?
+        * Muitos problemas com testes na camada de serviço pro conta da dependências, TransacaoServiceImplTest.
+        * Não consegui criar um utils que seja injetável para Spring, classe TransacaoUtils, por quê?
+        * O que fazer quando não deseja que um campo seja atualizado, ele não está no form, mas é o risco de ficar null?
+        * Como melhorar o padrão de validações de objetos de entrada dos controllers?
+        * Como melhorar a validação feita no TransacaoServiceImpl?
         * Para validações diferentes na mesma entity, quando o método salvar é uma validação e o editar outra
         como fazer, um form pra cada?
-        * Qual o papel da cada Bean no Spring, Controller, Service, Entity, Repository?
         * Quando uso no Controller um Service como o UsuarioService, como ele sabe que deve chamar o UsuarioServiceImpl?
-        * Qual o padrão de resposta para cada metodo do http.
+        * Qual o padrão de resposta para cada método do http.
         * Como melhorar a qualidade das respostas dos controllers? (ResponseEntity melhor trabalhado)
-        * Saber em que nível de maturidade essa api está.
-        * Como personalizar os erros de ValidationBeans?
-        * É uma boa consultar antes de deletar/atualizar?
-        * Se eu for delatar um item, e não encontrar, retornar noContent, notFount ou badRequest?
-        * Ler sobre @ApiResponses https://www.treinaweb.com.br/blog/documentando-uma-api-spring-boot-com-o-swagger
-        * O que fazer quando não deseja que um campo seja atualizado, ele não está no form, mas é o risco de ficar null ?
-        * Não consegui criar um utils que seja injetável para Spring, classe TransacaoUtils, por quê ?
-        * Muitos problemas com testes na camada de serviço pro conta da dependências, TransacaoServiceImplTest.

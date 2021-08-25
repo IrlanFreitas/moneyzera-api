@@ -11,12 +11,11 @@ import com.otp.moneyzeraapi.repository.CategoriaRepository;
 import com.otp.moneyzeraapi.repository.ContaRepository;
 import com.otp.moneyzeraapi.repository.TransacaoRepository;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
-import com.otp.moneyzeraapi.service.interfaces.ContaService;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -56,8 +55,8 @@ class TransacaoServiceImplTest {
     @MockBean
     private CategoriaRepository categoriaRepository;
 
-    @Disabled
     @Test
+    @Disabled
     public void deveSalvarUmaTransacao() {
         // ! Tem algo relacionado ao ContaService que eu preciso Mockar
 
@@ -81,8 +80,8 @@ class TransacaoServiceImplTest {
 
     }
 
-    @Disabled
     @Test
+    @Disabled
     public void naoDeveSalvarUmaTransacaoQuandoHouverErroDeValidacao() {
         final Transacao transacaoASalvar = criarTransacao();
         Mockito.doThrow(RegraNegocioException.class).when(service).validar(transacaoASalvar);
@@ -92,8 +91,8 @@ class TransacaoServiceImplTest {
         Mockito.verify(repository, Mockito.never()).save(transacaoASalvar);
     }
 
-    @Disabled
     @Test
+    @Disabled
     public void deveAtualizarUmaTransacao() {
 
         // * Cenário
@@ -109,8 +108,8 @@ class TransacaoServiceImplTest {
         Mockito.verify(repository, Mockito.times(1)).save(transacaoSalva);
     }
 
-    @Disabled
     @Test
+    @Disabled
     public void deveLancarErroAoTentarAtualizarUmaTransacaoQueAindaNaoFoiSalva() {
 
         // * Cenário
@@ -187,9 +186,54 @@ class TransacaoServiceImplTest {
     public void deveLancarErrorAoValidar() {
         Transacao transacao = Transacao.builder().build();
 
-        final RegraNegocioException exception = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        final RegraNegocioException descricaoException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe uma descrição válida.", descricaoException.getMessage());
+        
+        transacao.setDescricao("Descrição");
 
-        assertEquals("Informe uma descrição válida.", exception.getMessage());
+        final RegraNegocioException dataException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe uma data válida.", dataException.getMessage());
+
+        transacao.setData(LocalDate.of(2002, 2, 14));
+
+        final RegraNegocioException contaOrigemException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe uma conta já cadastrada.", contaOrigemException.getMessage());
+
+        Conta contaOrigem = Conta.builder().id(1L).build();
+
+        transacao.setContaOrigem(contaOrigem);
+
+        final RegraNegocioException contaOrigemUsuarioException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe um usuário já cadastrado.", contaOrigemUsuarioException.getMessage());
+
+        contaOrigem.setUsuario(Usuario.builder().id(1L).build());
+        transacao.setCategoria(Categoria.builder().tipo(TipoCategoria.TRANSFERENCIA).build());
+
+        final RegraNegocioException contaDestinoException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe uma conta destino já cadastrada.", contaDestinoException.getMessage());
+
+        Conta contaDestino = Conta.builder().id(2L).build();
+        contaDestino.setUsuario(Usuario.builder().id(2L).build());
+        transacao.setContaDestino(contaDestino);
+
+        final RegraNegocioException contaDestinoUsuarioException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe um usuário na conta destino já cadastrado.", contaDestinoUsuarioException.getMessage());
+
+        transacao.setValor(BigDecimal.ZERO);
+
+        final RegraNegocioException valorException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe um valor válido.", valorException.getMessage());
+
+        transacao.setCategoria(null);
+
+        final RegraNegocioException categoriaException = assertThrows(RegraNegocioException.class, () -> service.validar(transacao));
+        assertEquals("Informe uma categoria.", categoriaException.getMessage());
+
+        transacao.setCategoria(Categoria.builder().tipo(TipoCategoria.TRANSFERENCIA).build());
+
+        assertDoesNotThrow(() -> service.validar(transacao));
+
+
     }
 
     @Test

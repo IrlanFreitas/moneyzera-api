@@ -1,6 +1,7 @@
 package com.otp.moneyzeraapi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Usuario {
 
     private String email;
 
+    @JsonIgnore
     private String senha;
 
     @CreationTimestamp
