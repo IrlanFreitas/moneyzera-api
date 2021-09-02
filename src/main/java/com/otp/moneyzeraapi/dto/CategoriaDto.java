@@ -1,4 +1,4 @@
-package com.otp.moneyzeraapi.form;
+package com.otp.moneyzeraapi.dto;
 
 import com.otp.moneyzeraapi.enums.TipoCategoria;
 import com.otp.moneyzeraapi.model.Categoria;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-public class CategoriaForm {
+public class CategoriaDto {
 
     @NotNull @NotEmpty
     private String nome;

@@ -3,8 +3,8 @@ package com.otp.moneyzeraapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.otp.moneyzeraapi.exception.ErroAutenticacao;
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
-import com.otp.moneyzeraapi.form.UsuarioForm;
-import com.otp.moneyzeraapi.form.UsuarioLoginForm;
+import com.otp.moneyzeraapi.dto.UsuarioDto;
+import com.otp.moneyzeraapi.dto.UsuarioLoginDto;
 import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.service.interfaces.UsuarioService;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ public class UsuarioControllerTest {
         final String email = "irlan.freitas@teste.com";
         final String senha = "1234";
 
-        final UsuarioLoginForm usuario = UsuarioLoginForm.builder()
+        final UsuarioLoginDto usuario = UsuarioLoginDto.builder()
                 .email(email)
                 .senha(senha)
                 .build();
@@ -86,7 +86,7 @@ public class UsuarioControllerTest {
         final String email = "irlan.freitas@teste.com";
         final String senha = "1234";
 
-        final UsuarioLoginForm usuario = UsuarioLoginForm.builder()
+        final UsuarioLoginDto usuario = UsuarioLoginDto.builder()
                 .email(email)
                 .senha(senha)
                 .build();
@@ -110,7 +110,7 @@ public class UsuarioControllerTest {
 
     @Test
     public void deveCadastrarUmUsuario() throws Exception {
-        final UsuarioForm usuarioForm = UsuarioForm.builder()
+        final UsuarioDto usuarioForm = UsuarioDto.builder()
                 .nome("Irlan Freitas")
                 .email("irlan@contato.com")
                 .senha("1234")
@@ -141,7 +141,7 @@ public class UsuarioControllerTest {
 
     @Test
     public void deveLancarExcessaoAoCadastrarUmUsuarioInvalido() throws Exception {
-        final UsuarioForm usuarioForm = UsuarioForm.builder()
+        final UsuarioDto usuarioForm = UsuarioDto.builder()
                 .nome("Irlan Freitas")
                 .email("irlan@contato.com")
                 .senha("1234")

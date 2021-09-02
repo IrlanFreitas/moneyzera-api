@@ -6,6 +6,7 @@ import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.repository.UsuarioRepository;
 import com.otp.moneyzeraapi.service.interfaces.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @Override
     public Usuario autenticar(String email, String senha) {
 
@@ -27,8 +31,8 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new ErroAutenticacao("Usuário não encontrado.");
         }
 
-        if(!usuario.get().getSenha().equals(senha)) {
-            throw new ErroAutenticacao("Senha inválida.");
+        if(!encoder.matches(senha, usuario.get().getSenha())) {
+            throw new ErroAutenticacao("Usuário ou senha inválido.");
         }
 
         return usuario.get();
@@ -40,7 +44,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         validarEmail(usuario.getEmail());
 
+        criptografarSenha(usuario);
+
         return repository.save(usuario);
+    }
+
+    private void criptografarSenha(Usuario usuario) {
+        String senha = usuario.getSenha();
+        final String encode = encoder.encode(senha);
+        usuario.setSenha(encode);
     }
 
     @Override
@@ -76,6 +88,15 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RegraNegocioException("Necessário id para buscar usuario.");
 
         return repository.findById(id);
+    }
+
+    @Override
+    public Optional<Usuario> obterPorEmail(String email) {
+
+        if (email == null || email.isEmpty())
+            throw new RegraNegocioException("Necessário email para buscar usuario.");
+
+        return repository.findByEmail(email);
     }
 
     @Override

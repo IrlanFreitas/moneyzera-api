@@ -1,7 +1,6 @@
 package com.otp.moneyzeraapi.controller;
 
-import com.otp.moneyzeraapi.exception.RegraNegocioException;
-import com.otp.moneyzeraapi.form.CategoriaForm;
+import com.otp.moneyzeraapi.dto.CategoriaDto;
 import com.otp.moneyzeraapi.model.Categoria;
 import com.otp.moneyzeraapi.service.interfaces.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class CategoriaController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> salvar(@RequestBody CategoriaForm categoriaForm) {
+    public ResponseEntity<?> salvar(@RequestBody CategoriaDto categoriaForm) {
         try {
             final Categoria categoriaSalva = service.salvar(categoriaForm.converter());
 
@@ -41,7 +40,7 @@ public class CategoriaController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody CategoriaForm categoriaForm) {
+    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody CategoriaDto categoriaForm) {
 
         try {
             final Optional<Categoria> categoriaEncontrada = service.obterPorId(id);

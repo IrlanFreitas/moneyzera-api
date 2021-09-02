@@ -1,4 +1,4 @@
-package com.otp.moneyzeraapi.form;
+package com.otp.moneyzeraapi.dto;
 
 import com.otp.moneyzeraapi.exception.RegraNegocioException;
 import com.otp.moneyzeraapi.model.Conta;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-public class ContaForm {
+public class ContaDto {
 
     private String nome;
     private String descricao;

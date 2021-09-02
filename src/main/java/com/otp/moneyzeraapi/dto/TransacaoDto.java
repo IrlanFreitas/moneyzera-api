@@ -1,4 +1,4 @@
-package com.otp.moneyzeraapi.form;
+package com.otp.moneyzeraapi.dto;
 
 import com.otp.moneyzeraapi.enums.StatusTransacao;
 import com.otp.moneyzeraapi.enums.TipoCategoria;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class TransacaoForm {
+public class TransacaoDto {
 
     private String nome;
     private String descricao;

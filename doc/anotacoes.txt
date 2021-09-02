@@ -43,3 +43,7 @@ Evoluções Parte 3:
         * Quando uso no Controller um Service como o UsuarioService, como ele sabe que deve chamar o UsuarioServiceImpl?
         * Qual o padrão de resposta para cada método do http.
         * Como melhorar a qualidade das respostas dos controllers? (ResponseEntity melhor trabalhado)
+
+Evoluções Parte 4:
+
+    Deploy CI/CD: https://github.com/marketplace/actions/deploy-to-heroku

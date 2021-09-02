@@ -1,7 +1,7 @@
 package com.otp.moneyzeraapi.controller;
 
 import com.otp.moneyzeraapi.enums.StatusTransacao;
-import com.otp.moneyzeraapi.form.TransacaoForm;
+import com.otp.moneyzeraapi.dto.TransacaoDto;
 import com.otp.moneyzeraapi.model.Conta;
 import com.otp.moneyzeraapi.model.Transacao;
 import com.otp.moneyzeraapi.model.Usuario;
@@ -36,7 +36,7 @@ public class TransacaoController {
     private UsuarioService usuarioService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> salvar(@RequestBody TransacaoForm transacaoForm) {
+    public ResponseEntity<?> salvar(@RequestBody TransacaoDto transacaoForm) {
         try {
 
             final Transacao transacao = service.salvar(transacaoForm.converter(contaService, categoriaService));
@@ -48,7 +48,7 @@ public class TransacaoController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody TransacaoForm transacaoForm) {
+    public ResponseEntity<?> atualizar(@PathVariable("id") @NotNull Long id, @RequestBody TransacaoDto transacaoForm) {
 
         return service.buscarPorId(id).map(transacaoEncontrada -> {
             try {
@@ -67,7 +67,7 @@ public class TransacaoController {
         return service.buscarPorId(id).map( transacaoEncontrada -> {
             final StatusTransacao statusTransacao = StatusTransacao.valueOf(status);
 
-            if (statusTransacao == null) return ResponseEntity.badRequest().body("Status inválido");
+            if (statusTransacao.name().isEmpty()) return ResponseEntity.badRequest().body("Status inválido");
 
             try {
                 transacaoEncontrada.setStatus(statusTransacao);

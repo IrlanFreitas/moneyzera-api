@@ -1,6 +1,6 @@
 package com.otp.moneyzeraapi.controller;
 
-import com.otp.moneyzeraapi.form.ContaForm;
+import com.otp.moneyzeraapi.dto.ContaDto;
 import com.otp.moneyzeraapi.model.Conta;
 import com.otp.moneyzeraapi.model.Usuario;
 import com.otp.moneyzeraapi.service.interfaces.ContaService;
@@ -11,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,9 +26,9 @@ public class ContaController {
     private UsuarioService usuarioService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> salvar(@Valid @RequestBody ContaForm contaForm) {
+    public ResponseEntity<?> salvar(@Valid @RequestBody ContaDto contaDto) {
         try {
-            final Conta conta = service.salvar(contaForm.converter(usuarioService));
+            final Conta conta = service.salvar(contaDto.converter(usuarioService));
 
             return ResponseEntity.created(URI.create("/conta/"+conta.getId())).build();
         } catch (Exception error) {
@@ -80,11 +78,11 @@ public class ContaController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @Valid @RequestBody ContaForm contaForm ) {
+    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @Valid @RequestBody ContaDto contaDto) {
         return service.obterPorId(id).map( contaEncontrada -> {
             try {
 
-                Conta conta = service.atualizar(contaForm.converter(usuarioService));
+                Conta conta = service.atualizar(contaDto.converter(usuarioService));
                 conta.setId(id);
 
                 return ResponseEntity.ok(conta);

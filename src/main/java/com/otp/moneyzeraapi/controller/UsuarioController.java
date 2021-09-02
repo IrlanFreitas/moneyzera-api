@@ -1,10 +1,11 @@
 package com.otp.moneyzeraapi.controller;
 
+import com.otp.moneyzeraapi.dto.TokenDto;
 import com.otp.moneyzeraapi.exception.ErroAutenticacao;
-import com.otp.moneyzeraapi.form.UsuarioForm;
-import com.otp.moneyzeraapi.form.UsuarioLoginForm;
+import com.otp.moneyzeraapi.dto.UsuarioDto;
+import com.otp.moneyzeraapi.dto.UsuarioLoginDto;
 import com.otp.moneyzeraapi.model.Usuario;
-import com.otp.moneyzeraapi.repository.UsuarioRepository;
+import com.otp.moneyzeraapi.service.interfaces.JwtService;
 import com.otp.moneyzeraapi.service.interfaces.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,16 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
+    @Autowired
+    private JwtService jwtService;
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Usuario>> obter() {
         return ResponseEntity.ok( service.obterTodos() );
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioForm usuarioForm) {
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody UsuarioDto usuarioForm) {
 
         try {
             final Usuario usuarioCadastrado = service.salvar(usuarioForm.getUsuario());
@@ -41,19 +45,22 @@ public class UsuarioController {
     }
 
     @RequestMapping(path = "/autenticar", method = RequestMethod.POST)
-    public ResponseEntity<?> autenticar(@Valid @RequestBody UsuarioLoginForm login) {
+    public ResponseEntity<?> autenticar(@Valid @RequestBody UsuarioLoginDto login) {
 
         try {
             final Usuario usuario = service.autenticar(login.getEmail(), login.getSenha());
+            final String token = jwtService.gerarToken(usuario);
 
-            return ResponseEntity.ok(usuario);
+            final TokenDto tokenDto =  new TokenDto(token);
+
+            return ResponseEntity.ok(tokenDto);
         } catch (ErroAutenticacao error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizar(@RequestParam("id") Long id, @RequestBody UsuarioForm usuarioForm) {
+    public ResponseEntity<?> atualizar(@RequestParam("id") Long id, @RequestBody UsuarioDto usuarioForm) {
         return service.obterPorId(id).map(usuarioEncontrado -> {
             try {
 
